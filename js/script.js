@@ -3,8 +3,6 @@ Treehouse Techdegree:
 FSJS Project 2 - Data Pagination and Filtering
 */
 
-
-
 /*
 For assistance:
    Check out the "Project Resources" section of the Instructions tab: https://teamtreehouse.com/projects/data-pagination-and-filtering#instructions
@@ -14,13 +12,10 @@ For assistance:
 //constant for the max number of items per page
 const itemsPerPage = 9;
 
-
-/*
-Create the `showPage` function
-This function will create and insert/append the elements needed to display a "page" of nine students
-*/
 /**
- * 
+ * showPage function
+ * Takes information from and array of objects and displays it to the webpage
+ * in sections of no more than nine items
  * @param {*} list a list of all the student data
  * @param {*} page the page number
  */
@@ -50,7 +45,7 @@ function showPage(list, page){
             </div>
          </li>`; 
 
-         ul.insertAdjacentHTML('beforeend', studentItem);
+         ul.insertAdjacentHTML('beforeend', studentItem); //add the student item to the ul element
          
       }
 
@@ -60,10 +55,11 @@ function showPage(list, page){
 
 
 
-/*
-Create the `addPagination` function
-This function will create and insert/append the elements needed for the pagination buttons
-*/
+/**
+ * Creates the page buttons on the bottom of the page and determines which is the 
+ * active page based on the users clicks
+ * @param {*} list an array of objects representing the student data
+ */
 function addPagination(list){
    let numOfPages = Math.ceil(list.length / 9); //Determine how many pages are needed
    
@@ -74,12 +70,40 @@ function addPagination(list){
    //loop to create the buttons
    for(let i = 1; i <= numOfPages; i++){
       
+      let elements = `<li>
+                        <button type="button">${i}</button>
+                        </li>`;
+      ul.insertAdjacentHTML('beforeend', elements);
 
    }
 
+   //select first button and give it the class active
+   document.getElementsByTagName('button')[0].className = 'active';
+
+   //add event listener to parent of buttons when clicked
+   ul.addEventListener('click', (event) => {
+      let clickedElement = event.target;
+
+      //determine if a button element was clicked
+      if(clickedElement.tagName = 'button'){
+         //determine which button element was clicked and convert number to int
+         let buttonPressed = parseInt(clickedElement.textContent);
+         showPage(list, buttonPressed); //displays the updated page
+
+         //grab element with active class and change it to an empty string
+         document.querySelector('.active').className = '';
+
+         //change current page button to have a class of active
+         clickedElement.className = 'active';
+
+         //console.log(buttonPressed); tests the if statement and shows which button was pressed
+      }
+      // console.log(event.target); tests that the event listener is functioning
+
+   });
 }
 
 
 // Call functions
+showPage(data, 1);
 addPagination(data);
-showPage(data, 2);
